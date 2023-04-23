@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivinhe o Número</title>
+    <style>
+        h1 {
+            font-family:sans-serif;
+        }
+
+        body{
+            background-color: rgba(51, 51, 214, 0.758);
+        }
+    </style>
+</head>
+<body>
+    <h1>Escolha um número e veja se acertou!</h1>
+    <input type="number" id="numero">
+    <input type="button" value="Comparar" onclick="comparar()">
+    <input type="button" value="Sortear novos números" onclick="recarregar()">
+    <p id="resposta"></p>
+    
+    <script>
+       
+       function sorteia() {
+        return Math.round(Math.random()*10) //Math.random gera o número aleatorio; 10 pula uma casa decimal; Math.round arredonda o numero.
+       }
+
+       function sorteiaNumeros(quantidade) { //recebe a quantidade de numeros que quero sortear
+            var segredos = []
+
+            var numero = 1 //ajuda pra saber quantos numeros eu já sorteei
+
+            while(numero <= quantidade) {
+
+                var numeroAleatorio = sorteia()
+
+                if(numeroAleatorio !== 0) {
+                    var achou = false
+
+                    for(var posicao = 0; posicao < segredos.length; posicao++) {
+                        if (segredos[posicao] == numeroAleatorio) {
+                            achou = true
+                            break
+                        }
+                    }
+
+                    if(achou == false) {
+                        segredos.push(numeroAleatorio) //sorteia os numeros de acordo com a quantidade
+                        numero++
+                    }   
+                }
+            }
+            return segredos //manada os valores armazenados para o segredos
+        }
+        
+       var segredos = sorteiaNumeros(3) //pedi para sortear 5 numeros
+       console.log(segredos)
+       document.getElementById('numero').focus() //começa com foco na caixa
+       
+       function comparar() {
+        var num = Number(document.getElementById('numero').value)
+
+        var achou = false //achou é false enquanto não acertar
+        for (var posicao = 0;posicao < segredos.length;posicao++) { //pecorre os elementos pelo indice 
+            if (num == segredos[posicao]) { //compara com o numero que estiver nesse indice
+                achou = true //achou fica true se achar o valor
+                document.getElementById('resposta').innerHTML= 'Você acertou! Os números eram ' + segredos
+                break
+            }
+        }
+        if (achou == false) { //se é false é pq não achou o valor
+        document.getElementById('resposta').innerHTML= 'Você errou, os números que foram sorteados eram ' + segredos
+        }
+
+        document.getElementById('numero').value='' //apaga o numero da caixa no final
+        document.getElementById('numero').focus() //fica com foco no final
+       }
+
+       function recarregar() {
+        location.reload()
+       }
+    </script>
+</body>
+</html>
